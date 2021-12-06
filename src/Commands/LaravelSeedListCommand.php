@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Morrislaptop\LaravelSeedList\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class LaravelSeedListCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-seed-list';
 
     public $description = 'My command';
 

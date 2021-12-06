@@ -1,17 +1,17 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "morrislaptop/laravel-seed-list",
+    "description": "Make db:seed interactive",
     "keywords": [
-        ":vendor_name",
+        "morrislaptop",
         "laravel",
-        ":package_slug"
+        "laravel-seed-list"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/morrislaptop/laravel-seed-list",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Craig Morris",
+            "email": "craig.michael.morris@gmail.com",
             "role": "Developer"
         }
     ],
@@ -34,13 +34,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "Morrislaptop\\LaravelSeedList\\": "src",
+            "Morrislaptop\\LaravelSeedList\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Morrislaptop\\LaravelSeedList\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -54,10 +54,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Morrislaptop\\LaravelSeedList\\LaravelSeedListServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "LaravelSeedList": "Morrislaptop\\LaravelSeedList\\Facades\\LaravelSeedList"
             }
         }
     },
