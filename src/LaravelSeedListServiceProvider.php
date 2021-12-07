@@ -4,7 +4,6 @@ namespace Morrislaptop\LaravelSeedList;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Morrislaptop\LaravelSeedList\Commands\LaravelSeedListCommand;
 
 class LaravelSeedListServiceProvider extends PackageServiceProvider
 {
@@ -18,8 +17,6 @@ class LaravelSeedListServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-seed-list')
             ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_laravel-seed-list_table')
-            ->hasCommand(LaravelSeedListCommand::class);
+            ->hasViews();
     }
 }
