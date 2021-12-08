@@ -18,28 +18,6 @@ You can install the package via composer:
 composer require morrislaptop/laravel-seed-list
 ```
 
-You can publish the config file with:
-```bash
-php artisan vendor:publish --tag="laravel-seed-list_without_prefix-config"
-```
-
-This is the contents of the published config file:
-
-```php
-// config for Morrislaptop/LaravelSeedList
-return [
-    /*
-     * The directory where your seeder classes are stored.
-     */
-    'seeders_path' => database_path('seeders'),
-
-    /**
-     * The default namespace for seeders (excluded when printed in console)
-     */
-    'seeders_namespace' => 'Database\\Seeders\\',
-];
-```
-
 Configure your default seeder to extend the LaravelSeedLister provided by the package:
 
 ```php
