@@ -26,7 +26,8 @@ class TestCase extends Orchestra
 
     public function getEnvironmentSetUp($app)
     {
-        config()->set('database.default', 'testing');
+        config()->set('seed-list.seeders_path', __DIR__.'/TestClasses');
+        config()->set('seed-list.seeders_namespace', 'Morrislaptop\\LaravelSeedList\\Tests\\TestClasses\\');
 
         /*
         $migration = include __DIR__.'/../database/migrations/create_laravel-seed-list_table.php.stub';

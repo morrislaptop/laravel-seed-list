@@ -6,11 +6,9 @@ use PhpParser\Node;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
-use function Termwind\{render};
+use function Termwind\{render,renderUsing};
 use Illuminate\Database\Seeder;
-use PhpParser\NodeVisitorAbstract;
 use Symfony\Component\Finder\Finder;
-use PBergman\Console\Helper\TreeHelper;
 use PhpParser\NodeVisitor\NameResolver;
 use hanneskod\classtools\Iterator\ClassIterator;
 
@@ -19,33 +17,67 @@ class LaravelSeedLister extends Seeder
     public function run()
     {
         $seeders = collect($this->getSeeders())
-            // ->map(fn ($c) => $c->getShortName())
-            // ->filter(fn ($c) => $c !== 'DatabaseSeeder')
             ->sort()
             ->values()
             ->toArray();
 
-        render(
-            view('seed-list::list', [
-                'seeders' => $seeders
-            ])
-        );
+        renderUsing($this->command->getOutput());
 
-        $chosen = $this->command->ask(
-            question: 'Which seeder(s) would you like to run? Separate multiple choices with a space.',
-        );
+        $html = view('seed-list::list', [
+            'seeders' => $seeders
+        ]);
+
+        /**
+         * Termwind seems to add spaces randomly, but we can't add those
+         * spaces to our test file as trailing spaces are removed by
+         * the editor. Luckily we're only printing class names
+         * so let's just get rid of all WS from the html.
+         */
+        $html = preg_replace('/\s+/', '', $html);
+
+        render($html);
+
+        $chosen = $this->choose($seeders);
 
         foreach ($chosen as $seeder) {
-            $this->call('Database\\Seeders\\'.$seeder);
+            $this->call($seeder);
         }
     }
 
+    protected function choose($seeders)
+    {
+        $chosen = $this->command->ask(
+            question: 'Which seeder(s) would you like to run? Separate multiple choices with a comma',
+        );
+
+        $split = array_map('trim', explode(',', $chosen));
+
+        $range = range(1, count($seeders));
+
+        $notInRange = array_diff($split, $range);
+
+        if (count($notInRange) > 0) {
+            $this->command->error(
+                'The following choices are not valid: '.implode(', ', $notInRange)
+            );
+
+            return $this->choose($seeders);
+        }
+
+        $classes = array_map(fn ($i) => $seeders[$i - 1]['name'], $split);
+
+        return $classes;
+    }
+
+    /**
+     * @return array{name: string, children: array}
+     */
     protected function getSeeders()
     {
         $finder = new Finder;
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $classIterator = new ClassIterator($finder->in(database_path('seeders')));
-        $classMap = collect($classIterator->getClassMap());
+        $classIterator = new ClassIterator($finder->in(config('seed-list.seeders_path')));
+        $classMap = collect($classIterator->not($classIterator->type(LaravelSeedLister::class))->getClassMap());
 
         $fqAsts = $classMap->map(function ($splFileInfo) use ($parser) {
             $ast = $parser->parse($splFileInfo->getContents());
@@ -67,6 +99,9 @@ class LaravelSeedLister extends Seeder
         return $classes;
     }
 
+    /**
+     * @return array{name: string, children: array}
+     */
     protected function getChildren($className, $fqAsts)
     {
         $ast = $fqAsts[$className];

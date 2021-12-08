@@ -6,24 +6,9 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/morrislaptop/laravel-seed-list.svg?style=flat-square)](https://packagist.org/packages/morrislaptop/laravel-seed-list)
 
 ---
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
+Often forget what your seeder classes are called? This package can make `db:seed` interactive so you can see a list and choose which seeders to run (and which seeders will call). 
 
-1. Press the "Use template" button at the top of this repo to create a new repo with the contents of this laravel-seed-list
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files
-3. Remove this block of text.
-4. Have fun creating your package.
-5. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-seed-list.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-seed-list)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+![screenshot](screenshot.png)
 
 ## Installation
 
@@ -33,36 +18,46 @@ You can install the package via composer:
 composer require morrislaptop/laravel-seed-list
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="laravel-seed-list_without_prefix-migrations"
-php artisan migrate
-```
-
 You can publish the config file with:
 ```bash
 php artisan vendor:publish --tag="laravel-seed-list_without_prefix-config"
 ```
 
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="example-views"
-```
-
 This is the contents of the published config file:
 
 ```php
+// config for Morrislaptop/LaravelSeedList
 return [
+    /*
+     * The directory where your seeder classes are stored.
+     */
+    'seeders_path' => database_path('seeders'),
+
+    /**
+     * The default namespace for seeders (excluded when printed in console)
+     */
+    'seeders_namespace' => 'Database\\Seeders\\',
 ];
+```
+
+Configure your default seeder to extend the LaravelSeedLister provided by the package:
+
+```php
+<?php
+
+namespace Database\Seeders;
+
+use Morrislaptop\LaravelSeedList\LaravelSeedLister;
+
+class DatabaseSeeder extends LaravelSeedLister
+{
+}
 ```
 
 ## Usage
 
-```php
-$laravel-seed-list = new Morrislaptop\LaravelSeedList();
-echo $laravel-seed-list->echoPhrase('Hello, Morrislaptop!');
+```bash
+php artisan db:seed
 ```
 
 ## Testing
