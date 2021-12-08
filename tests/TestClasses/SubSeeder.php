@@ -13,6 +13,5 @@ class SubSeeder extends Seeder
      */
     public function run()
     {
-
     }
 }

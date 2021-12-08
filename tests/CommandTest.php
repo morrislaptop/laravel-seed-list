@@ -1,9 +1,9 @@
 <?php
 
-use Morrislaptop\LaravelSeedList\Tests\TestClasses\Of;
-use Morrislaptop\LaravelSeedList\Tests\TestClasses\SubSeeder;
 use Morrislaptop\LaravelSeedList\Tests\TestClasses\AnotherSeeder;
 use Morrislaptop\LaravelSeedList\Tests\TestClasses\DatabaseSeeder;
+use Morrislaptop\LaravelSeedList\Tests\TestClasses\Of;
+use Morrislaptop\LaravelSeedList\Tests\TestClasses\SubSeeder;
 
 it('lists, validates and runs seeders', function () {
     $this->artisan('db:seed', ['class' => DatabaseSeeder::class])

@@ -2,15 +2,16 @@
 
 namespace Morrislaptop\LaravelSeedList;
 
+use hanneskod\classtools\Iterator\ClassIterator;
+use Illuminate\Database\Seeder;
 use PhpParser\Node;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
-use PhpParser\ParserFactory;
-use function Termwind\{render,renderUsing};
-use Illuminate\Database\Seeder;
-use Symfony\Component\Finder\Finder;
 use PhpParser\NodeVisitor\NameResolver;
-use hanneskod\classtools\Iterator\ClassIterator;
+use PhpParser\ParserFactory;
+use Symfony\Component\Finder\Finder;
+use function Termwind\render;
+use function Termwind\renderUsing;
 
 class LaravelSeedLister extends Seeder
 {
@@ -24,7 +25,7 @@ class LaravelSeedLister extends Seeder
         renderUsing($this->command->getOutput());
 
         $html = view('seed-list::list', [
-            'seeders' => $seeders
+            'seeders' => $seeders,
         ]);
 
         /**
@@ -74,16 +75,16 @@ class LaravelSeedLister extends Seeder
      */
     protected function getSeeders()
     {
-        $finder = new Finder;
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $finder = new Finder();
+        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
         $classIterator = new ClassIterator($finder->in(config('seed-list.seeders_path')));
         $classMap = collect($classIterator->not($classIterator->type(LaravelSeedLister::class))->getClassMap());
 
         $fqAsts = $classMap->map(function ($splFileInfo) use ($parser) {
             $ast = $parser->parse($splFileInfo->getContents());
 
-            $nameTraverser = new NodeTraverser;
-            $nameResolver = new NameResolver;
+            $nameTraverser = new NodeTraverser();
+            $nameResolver = new NameResolver();
             $nameTraverser->addVisitor($nameResolver);
 
             return $nameTraverser->traverse($ast);
@@ -108,8 +109,8 @@ class LaravelSeedLister extends Seeder
 
         $children = [];
 
-        $nodeFinder = new NodeFinder;
-        $calls = $nodeFinder->find($ast, function(Node $node) {
+        $nodeFinder = new NodeFinder();
+        $calls = $nodeFinder->find($ast, function (Node $node) {
             return $node instanceof Node\Stmt\Expression
             && $node->expr instanceof Node\Expr\MethodCall
             && $node->expr->name instanceof Node\Identifier

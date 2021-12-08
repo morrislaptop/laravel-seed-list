@@ -13,6 +13,5 @@ class Seeders extends Seeder
      */
     public function run()
     {
-
     }
 }

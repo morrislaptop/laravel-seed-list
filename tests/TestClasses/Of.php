@@ -13,6 +13,5 @@ class Of extends Seeder
      */
     public function run()
     {
-
     }
 }
