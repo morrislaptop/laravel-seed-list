@@ -20,8 +20,6 @@
         "hanneskod/classtools": "^1.2",
         "illuminate/contracts": "^8.0",
         "nikic/php-parser": "^4.13",
-        "nunomaduro/termwind": "^1.1",
-        "pbergman/tree-helper": "^1.0",
         "spatie/laravel-package-tools": "^1.9.2"
     },
     "require-dev": {
