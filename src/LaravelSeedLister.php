@@ -17,57 +17,38 @@ class LaravelSeedLister extends Seeder
 {
     public function run()
     {
-        $seeders = collect($this->getSeeders())
-            ->sort()
-            ->values()
-            ->toArray();
-
-        renderUsing($this->command->getOutput());
-
-        $html = view('seed-list::list', [
-            'seeders' => $seeders,
-        ]);
-
-        /**
-         * Termwind seems to add spaces randomly, but we can't add those
-         * spaces to our test file as trailing spaces are removed by
-         * the editor. Luckily we're only printing class names
-         * so let's just get rid of all WS from the html.
-         */
-        $html = preg_replace('/\s+/', '', $html);
-
-        render($html);
+        $seeders = $this->getSeeders();
 
         $chosen = $this->choose($seeders);
 
         foreach ($chosen as $seeder) {
-            $this->call($seeder);
+            $this->call(config('seed-list.seeders_namespace') . $seeder);
         }
     }
 
+    /**
+     * Sorts and formats the list of seeders and returns an array
+     * of seeders to run
+     *
+     * @return string[]
+     */
     protected function choose($seeders)
     {
-        $chosen = $this->command->ask(
-            question: 'Which seeder(s) would you like to run? Separate multiple choices with a comma',
+        $choices = $seeders->sortBy('name')->mapWithKeys(function ($seeder) {
+            $willRun = $seeder['children']->prepend($seeder['name']);
+
+            return [
+                $seeder['name'] => $willRun->implode(', '),
+            ];
+        });
+
+        $chosen = $this->command->choice(
+            'Which seeder would you like to run?',
+            $choices->toArray(),
+            multiple: true,
         );
 
-        $split = array_map('trim', explode(',', $chosen));
-
-        $range = range(1, count($seeders));
-
-        $notInRange = array_diff($split, $range);
-
-        if (count($notInRange) > 0) {
-            $this->command->error(
-                'The following choices are not valid: '.implode(', ', $notInRange)
-            );
-
-            return $this->choose($seeders);
-        }
-
-        $classes = array_map(fn ($i) => $seeders[$i - 1]['name'], $split);
-
-        return $classes;
+        return $chosen;
     }
 
     /**
@@ -92,8 +73,8 @@ class LaravelSeedLister extends Seeder
 
         $classes = $classMap->map(function ($splFileInfo, $className) use ($fqAsts) {
             return [
-                'name' => $className,
-                'children' => $this->getChildren($className, $fqAsts),
+                'name' => class_basename($className),
+                'children' => $this->getChildren($className, $fqAsts, collect()),
             ];
         });
 
@@ -103,11 +84,9 @@ class LaravelSeedLister extends Seeder
     /**
      * @return array{name: string, children: array}
      */
-    protected function getChildren($className, $fqAsts)
+    protected function getChildren($className, $fqAsts, $children)
     {
         $ast = $fqAsts[$className];
-
-        $children = [];
 
         $nodeFinder = new NodeFinder();
         $calls = $nodeFinder->find($ast, function (Node $node) {
@@ -127,10 +106,9 @@ class LaravelSeedLister extends Seeder
             foreach ($seeders as $seeder) {
                 $seederName = $seeder->class->toString();
 
-                $children[] = [
-                    'name' => $seederName,
-                    'children' => $this->getChildren($seederName, $fqAsts),
-                ];
+                $children->add(class_basename($seederName));
+
+                $this->getChildren($seederName, $fqAsts, $children);
             }
         }
 
