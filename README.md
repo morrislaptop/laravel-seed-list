@@ -18,7 +18,7 @@ You can install the package via composer:
 composer require morrislaptop/laravel-seed-list
 ```
 
-Configure your default seeder to extend the LaravelSeedLister provided by the package:
+Configure your default seeder to extend the `LaravelSeedLister` provided by the package:
 
 ```php
 <?php
