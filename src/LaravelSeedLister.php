@@ -10,8 +10,6 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
 use Symfony\Component\Finder\Finder;
-use function Termwind\render;
-use function Termwind\renderUsing;
 
 class LaravelSeedLister extends Seeder
 {
