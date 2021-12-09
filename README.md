@@ -6,7 +6,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/morrislaptop/laravel-seed-list.svg?style=flat-square)](https://packagist.org/packages/morrislaptop/laravel-seed-list)
 
 ---
-Often forget what your seeder classes are called? This package can make `db:seed` interactive so you can see a list and choose which seeders to run (and which seeders will call). 
+Often forget what your seeder classes are called? This package can make `db:seed` interactive so you can see a list and choose which seeders to run (and which additional seeders will be called).
 
 ![screenshot](screenshot.png)
 
