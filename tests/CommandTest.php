@@ -15,5 +15,5 @@ it('lists validates and runs seeders', function () {
         ->expectsOutput('Seeding: ' . Of::class)
         // ->expectsOutput('Seeded: ' . Of::class . ' (0.00ms)')
         ->expectsOutput('Database seeding completed successfully.')
-        ;
+    ;
 });
