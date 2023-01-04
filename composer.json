@@ -18,7 +18,7 @@
     "require": {
         "php": "^8.0",
         "hanneskod/classtools": "^1.2",
-        "illuminate/contracts": "^8.0",
+        "illuminate/contracts": "^8.0|^9.0",
         "nikic/php-parser": "^4.13",
         "spatie/laravel-package-tools": "^1.9.2"
     },
