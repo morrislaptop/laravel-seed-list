@@ -3,6 +3,7 @@
 namespace Morrislaptop\LaravelSeedList;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 use PhpParser\Node;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
@@ -50,9 +51,9 @@ class LaravelSeedLister extends Seeder
     }
 
     /**
-     * @return array{name: string, children: array}
+     * @return Collection<array{name: string, children: array}>
      */
-    protected function getSeeders()
+    protected function getSeeders(): Collection
     {
         $finder = new Finder();
         $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
@@ -87,6 +88,8 @@ class LaravelSeedLister extends Seeder
         $ast = $fqAsts[$className];
 
         $nodeFinder = new NodeFinder();
+
+        /** @var Node\Stmt\Expression[] */
         $calls = $nodeFinder->find($ast, function (Node $node) {
             return $node instanceof Node\Stmt\Expression
             && $node->expr instanceof Node\Expr\MethodCall
@@ -94,9 +97,13 @@ class LaravelSeedLister extends Seeder
             && $node->expr->name->toString() === 'call';
         });
 
-        foreach ($calls as $node) {
-            $class = $node->expr->args[0]->value;
+        foreach ($calls as $node)
+        {
+            /** @var Node\Expr\MethodCall */
+            $expr = $node->expr;
+            $class = $expr->args[0]->value;
 
+            /** @var Node\Expr\ClassConstFetch[] */
             $seeders = $class instanceof Node\Expr\Array_
                 ? array_map(fn ($item) => $item->value, $class->items)
                 : [$class];
