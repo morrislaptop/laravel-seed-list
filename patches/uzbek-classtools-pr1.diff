@@ -1,0 +1,13 @@
+diff --git a/src/Name.php b/src/Name.php
+index dd1d0ff..95aa9d5 100644
+--- a/src/Name.php
++++ b/src/Name.php
+@@ -36,7 +36,7 @@ public function __construct(string $name)
+     /**
+      * Get as string
+      */
+-    public function tostring(): string
++    public function __toString(): string
+     {
+         return implode('\\', $this->parts);
+     }

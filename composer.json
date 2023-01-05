@@ -15,9 +15,16 @@
             "role": "Developer"
         }
     ],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../laravel-seed-list"
+        }
+    ],
     "require": {
         "php": "^8.0",
-        "illuminate/contracts": "^8.0|^9.0",
+        "cweagans/composer-patches": "^1.7",
+        "illuminate/contracts": "^8.0|^9.0|^10.0",
         "nikic/php-parser": "^4.13",
         "spatie/laravel-package-tools": "^1.9.2",
         "uzbek/classtools": "^0.0.2"
@@ -54,7 +61,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "phpstan/extension-installer": true
+            "phpstan/extension-installer": true,
+            "cweagans/composer-patches": true
         }
     },
     "extra": {
@@ -64,6 +72,11 @@
             ],
             "aliases": {
                 "LaravelSeedList": "Morrislaptop\\LaravelSeedList\\Facades\\LaravelSeedList"
+            }
+        },
+        "patches": {
+            "uzbek/classtools": {
+                "Fix Stringable method": "patches/uzbek-classtools-pr1.diff"
             }
         }
     },
