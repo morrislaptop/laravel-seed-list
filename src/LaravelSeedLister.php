@@ -97,8 +97,7 @@ class LaravelSeedLister extends Seeder
             && $node->expr->name->toString() === 'call';
         });
 
-        foreach ($calls as $node)
-        {
+        foreach ($calls as $node) {
             /** @var Node\Expr\MethodCall */
             $expr = $node->expr;
             $class = $expr->args[0]->value;
