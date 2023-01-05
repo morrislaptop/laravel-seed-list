@@ -2,7 +2,6 @@
 
 namespace Morrislaptop\LaravelSeedList;
 
-use hanneskod\classtools\Iterator\ClassIterator;
 use Illuminate\Database\Seeder;
 use PhpParser\Node;
 use PhpParser\NodeFinder;
@@ -10,6 +9,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
 use Symfony\Component\Finder\Finder;
+use Uzbek\ClassTools\Iterator\ClassIterator;
 
 class LaravelSeedLister extends Seeder
 {
