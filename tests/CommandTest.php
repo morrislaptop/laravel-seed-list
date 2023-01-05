@@ -12,7 +12,7 @@ it('lists validates and runs seeders before L9', function () {
         ->expectsOutput('Seeding: ' . AnotherSeeder::class)
         ->expectsOutput('Seeding: ' . SubSeeder::class)
         ->expectsOutput('Seeding: ' . Of::class)
-        ->assertSuccessful();
+        ->assertExitCode(0);
     ;
 })->skip(version_compare(Application::VERSION, '9.0.0', '>='), 'Only runs before L9');
 
