@@ -2,7 +2,7 @@
 
 namespace Morrislaptop\LaravelSeedList;
 
-use hanneskod\classtools\Iterator\ClassIterator;
+use Uzbek\ClassTools\Iterator\ClassIterator;
 use Illuminate\Database\Seeder;
 use PhpParser\Node;
 use PhpParser\NodeFinder;
